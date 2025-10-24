@@ -61,7 +61,7 @@ const Auth = () => {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/`,
+            emailRedirectTo: new URL(import.meta.env.BASE_URL, window.location.origin).toString(),
             data: {
               full_name: fullName,
             },
@@ -88,7 +88,8 @@ const Auth = () => {
 
   const handleGoogle = async () => {
     try {
-      const redirectTo = new URLSearchParams(location.search).get("redirect") || window.location.origin;
+      const baseUrl = new URL(import.meta.env.BASE_URL, window.location.origin).toString();
+      const redirectTo = new URLSearchParams(location.search).get("redirect") || baseUrl;
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
         options: { redirectTo },
